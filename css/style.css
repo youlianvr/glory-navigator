@@ -1,154 +1,231 @@
 /* ============================================================
  * Дорогами славы — дизайн-токены и стили.
- * Мемориальная палитра: глубокий красный (звезда, нитка маршрута),
- * тёмный графит (текст), тёплая бумага (фон), приглушённое золото
- * (акценты). Без церковной зелёно-золотой гаммы проекта храмов.
+ *
+ * Дизайн-план (frontend-design pass, 2026-09-19)
+ *
+ * Тема: дорожный указатель и мемориальная доска. Аудитория — жюри
+ * конкурса, школьники, гости района с телефоном. Работа страницы —
+ * провести читателя по кольцу мест памяти и рассказать каждую историю.
+ *
+ * Палитра (именованные значения):
+ *   --granite   #23211e  тёмный гранит — текст
+ *   --paper     #f4f0e8  тёплая бумага — фон (не крем-дефолт: серее и холоднее)
+ *   --carnation #a32b2b  гвоздика — акцент (звезда, нитка, кнопки)
+ *   --carnation-deep #7d1f1f — тёмная гвоздика (шапка, hover)
+ *   --wreath    #8a6d2f  сухое золото венка — вторичный акцент
+ *   --stone     #ddd5c8  светлый камень — линии
+ *
+ * Типографика (локальные системные стеки, без CDN):
+ *   Дисплей/заголовки: Georgia (доступна в Windows/macOS; fallback
+ *     'Times New Roman', serif) — книжная антиква под мемориальные
+ *     доски, с трекингом надписей-капителью.
+ *   Текст: Verdana, Tahoma — честный экранäs шрифт для длинного
+ *     чтения с телефона; а не безликий system-ui.
+ *   Цифры шагов/координаты: Consolas/monospace — табличные данные.
+ *
+ * Подпись (signature): «нитка памяти» — пунктирная гвоздичная линия,
+ * которая прошивает страницу: под шапкой, слева у истории места и на
+ * схеме как маршрут. Один приём, три масштаба.
+ *
+ * Схема данных не знает о CSS; правка данных — js/data.js.
  * ============================================================ */
 
 :root {
-  --bg: #f6f3ee;
-  --surface: #ffffff;
-  --ink: #23211e;
+  --granite: #23211e;
   --ink-soft: #5c574f;
-  --red: #a32b2b;
-  --red-dark: #7d1f1f;
-  --gold: #b98a2f;
-  --line: #ddd5c8;
-  --radius: 10px;
+  --paper: #f4f0e8;
+  --surface: #fffdf9;
+  --carnation: #a32b2b;
+  --carnation-deep: #7d1f1f;
+  --wreath: #8a6d2f;
+  --stone: #ddd5c8;
+  --radius: 8px;
   --shadow: 0 1px 3px rgba(35, 33, 30, 0.12);
+  --font-display: Georgia, "Times New Roman", serif;
+  --font-body: Verdana, Tahoma, "Segoe UI", sans-serif;
+  --font-mono: Consolas, "Courier New", monospace;
 }
 
 * { box-sizing: border-box; }
 
 body {
   margin: 0;
-  font-family: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
-  background: var(--bg);
-  color: var(--ink);
-  line-height: 1.55;
+  font-family: var(--font-body);
+  background: var(--paper);
+  color: var(--granite);
+  line-height: 1.6;
+  font-size: 15px;
 }
 
 .container { max-width: 960px; margin: 0 auto; padding: 0 16px; }
 
-a { color: var(--red); }
-a:hover { color: var(--red-dark); }
+a { color: var(--carnation); }
+a:hover { color: var(--carnation-deep); }
+a:focus-visible, .btn:focus-visible {
+  outline: 3px solid var(--wreath);
+  outline-offset: 2px;
+}
+
+/* ---------- Типографика ---------- */
+h1, h2, h3, .navbar-brand {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+}
+h1 { font-size: clamp(1.6rem, 4.5vw, 2.1rem); margin: 26px 0 10px; }
+h2 { font-size: 1.3rem; margin: 26px 0 8px; }
+h3 { font-size: 1.08rem; margin: 0; }
+.lead { color: var(--ink-soft); font-size: 1.02rem; }
+
+/* Эйброу-строка на странице места: тип места · деревня · год */
+.place-kind {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--wreath);
+}
+
+/* ---------- Подпись: нитка памяти ---------- */
+.memory-thread {
+  height: 0;
+  border: none;
+  border-top: 3px dashed var(--carnation);
+  opacity: 0.55;
+  margin: 0 0 20px;
+}
 
 /* ---------- Шапка ---------- */
 .site-header {
-  background: var(--red-dark);
+  background: var(--carnation-deep);
   color: #fff;
   box-shadow: var(--shadow);
 }
 .navbar {
   max-width: 960px;
   margin: 0 auto;
-  padding: 10px 16px;
+  padding: 12px 16px;
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
-  gap: 8px 20px;
+  align-items: baseline;
+  gap: 6px 22px;
 }
 .navbar-brand {
   color: #fff;
   font-weight: 700;
-  font-size: 1.15rem;
+  font-size: 1.35rem;
   text-decoration: none;
+  letter-spacing: 0.02em;
 }
 .navbar-links {
   list-style: none;
   display: flex;
   flex-wrap: wrap;
-  gap: 4px 14px;
+  gap: 2px 16px;
   margin: 0;
   padding: 0;
+  font-size: 0.9rem;
 }
 .navbar-links a {
   color: rgba(255, 255, 255, 0.85);
   text-decoration: none;
-  padding: 4px 2px;
+  padding: 6px 2px;
   border-bottom: 2px solid transparent;
 }
 .navbar-links a:hover { color: #fff; }
 .navbar-links a[aria-current="page"] {
   color: #fff;
-  border-bottom-color: var(--gold);
+  border-bottom-color: var(--wreath);
 }
-
-/* ---------- Заголовки и текст ---------- */
-h1 { font-size: 1.7rem; line-height: 1.25; margin: 24px 0 8px; }
-h2 { font-size: 1.25rem; margin: 24px 0 8px; }
-.lead { color: var(--ink-soft); font-size: 1.05rem; }
 
 /* ---------- Список нитки маршрута ---------- */
 .route-list, .map-index {
   list-style: none;
   padding: 0;
-  margin: 16px 0;
+  margin: 18px 0;
 }
 .route-list li {
   display: flex;
   align-items: center;
   gap: 12px;
   background: var(--surface);
-  border: 1px solid var(--line);
+  border: 1px solid var(--stone);
   border-radius: var(--radius);
-  padding: 12px 16px;
+  padding: 13px 16px;
   margin-bottom: 8px;
   box-shadow: var(--shadow);
+  transition: border-color 0.15s ease;
 }
+.route-list li:hover { border-color: var(--carnation); }
 .route-step {
   flex: 0 0 auto;
-  width: 28px;
-  height: 28px;
+  width: 30px;
+  height: 30px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: var(--red);
+  background: var(--carnation);
   color: #fff;
   border-radius: 50%;
+  font-family: var(--font-mono);
   font-weight: 700;
   font-size: 0.9rem;
 }
-.glory-star { color: var(--red); flex: 0 0 auto; }
+.glory-star { color: var(--carnation); flex: 0 0 auto; }
 .route-name { font-weight: 600; text-decoration: none; }
-.route-settlement { margin-left: auto; color: var(--ink-soft); font-size: 0.9rem; text-align: right; }
+.route-name:hover { text-decoration: underline; }
+.route-settlement {
+  margin-left: auto;
+  color: var(--ink-soft);
+  font-size: 0.82rem;
+  text-align: right;
+}
+@media (max-width: 560px) {
+  .route-settlement { display: none; }
+}
 
 /* ---------- Карточки ---------- */
 .card {
   background: var(--surface);
-  border: 1px solid var(--line);
+  border: 1px solid var(--stone);
   border-radius: var(--radius);
   padding: 16px 20px;
   margin: 16px 0;
   box-shadow: var(--shadow);
 }
 .stop-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-.stop-head h3 { margin: 0; }
-.stop-meta { margin: 4px 0 0; color: var(--ink-soft); font-size: 0.9rem; }
+.stop-meta { margin: 4px 0 0; color: var(--ink-soft); font-size: 0.88rem; }
 
 /* ---------- Схема ---------- */
 .map-schema {
-  background: #efe9dd;
-  border: 1px solid var(--line);
+  background: #ece6d8;
+  border: 1px solid var(--stone);
   border-radius: var(--radius);
   padding: 12px;
   margin: 16px 0;
 }
 .map-schema svg { width: 100%; height: auto; display: block; }
-.map-district { fill: #f8f5ee; stroke: #b3a78e; stroke-width: 1.5; }
+.map-district { fill: #f6f2e9; stroke: #a89a7e; stroke-width: 1.4; }
 .map-road { fill: none; stroke: #cfc4a9; stroke-width: 2; }
-.map-river { fill: none; stroke: #7ba3bd; stroke-width: 3; stroke-linecap: round; }
-.map-route { fill: none; stroke: var(--red); stroke-width: 2.5; stroke-dasharray: 7 4; }
+.map-river { fill: none; stroke: #6d97b3; stroke-width: 3; stroke-linecap: round; }
+.map-route { fill: none; stroke: var(--carnation); stroke-width: 2.5; stroke-dasharray: 7 4; }
 .map-marker a { cursor: pointer; }
 .map-marker .marker-hit { fill: transparent; }
-.map-marker .marker-step { font-size: 11px; font-weight: 700; fill: var(--ink); }
-.map-marker .marker-star { fill: var(--red); stroke: #fff; stroke-width: 1; }
-.map-marker:hover .marker-star, .map-marker:focus .marker-star { fill: var(--gold); }
+.map-marker:focus-within .marker-star { fill: var(--wreath); }
+.map-marker .marker-step {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  fill: var(--granite);
+}
+.map-marker .marker-star { fill: var(--carnation); stroke: #fff; stroke-width: 1; }
+.map-marker:hover .marker-star { fill: var(--wreath); }
 .map-marker .marker-label {
   font-size: 12px;
-  fill: var(--ink);
+  fill: var(--granite);
   paint-order: stroke;
-  stroke: #efe9dd;
+  stroke: #ece6d8;
   stroke-width: 3px;
 }
 .map-legend {
@@ -158,53 +235,63 @@ h2 { font-size: 1.25rem; margin: 24px 0 8px; }
   gap: 6px 20px;
   padding: 8px 4px 0;
   margin: 0;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: var(--ink-soft);
 }
 .map-legend li { display: flex; align-items: center; gap: 8px; }
-.legend-route { width: 26px; height: 0; border-top: 3px dashed var(--red); }
-.legend-river { width: 26px; height: 0; border-top: 3px solid #7ba3bd; }
+.legend-route { width: 26px; height: 0; border-top: 3px dashed var(--carnation); }
+.legend-river { width: 26px; height: 0; border-top: 3px solid #6d97b3; }
 .legend-road { width: 26px; height: 0; border-top: 2px solid #cfc4a9; }
-.legend-star { color: var(--red); }
+.legend-star { color: var(--carnation); }
 .map-index { columns: 2; gap: 24px; }
 .map-index li { break-inside: avoid; margin-bottom: 4px; }
 @media (max-width: 640px) { .map-index { columns: 1; } }
 
 /* ---------- Таблицы ---------- */
-.table-scroll { overflow-x: auto; }
+.table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 .data-table {
   width: 100%;
   border-collapse: collapse;
   background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  overflow: hidden;
+  border: 1px solid var(--stone);
   box-shadow: var(--shadow);
+  font-size: 0.92rem;
 }
 .data-table th, .data-table td {
   padding: 10px 12px;
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid var(--stone);
   text-align: left;
   vertical-align: top;
-  font-size: 0.95rem;
 }
-.data-table th { background: #efe9dd; white-space: nowrap; }
+.data-table th { background: #ece6d8; white-space: nowrap; font-family: var(--font-display); }
+.data-table td:nth-child(4) { font-family: var(--font-mono); font-size: 0.85rem; }
 
 /* ---------- Страница места ---------- */
 .place-head { margin-bottom: 8px; }
-.place-kind { color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.06em; font-size: 0.8rem; margin: 24px 0 4px; }
-.place-address { color: var(--ink-soft); display: flex; align-items: center; gap: 8px; }
+.place-kind { margin: 26px 0 4px; }
+.place-address {
+  color: var(--ink-soft);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.place-history {
+  border-left: 3px dashed var(--carnation);
+  padding-left: 18px;
+  margin: 20px 0;
+}
+.place-history h2 { margin-top: 0; }
 .place-discrepancy {
-  background: #fdf3e0;
-  border: 1px solid var(--gold);
-  border-left: 5px solid var(--gold);
+  background: #f7efdc;
+  border: 1px solid var(--wreath);
+  border-left: 5px solid var(--wreath);
   border-radius: var(--radius);
   padding: 12px 18px;
   margin: 16px 0;
 }
 .photo-slot {
-  background: #efe9dd;
-  border: 1px dashed var(--line);
+  background: #ece6d8;
+  border: 1px dashed var(--stone);
   border-radius: var(--radius);
   padding: 20px;
   color: var(--ink-soft);
@@ -215,30 +302,69 @@ h2 { font-size: 1.25rem; margin: 24px 0 8px; }
 .visit-photos { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
 .visit-photos img { width: 100%; height: auto; border-radius: var(--radius); }
 .map-links { display: flex; flex-wrap: wrap; gap: 10px; margin: 12px 0; }
-.place-neighbours { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin: 28px 0; }
+.place-neighbours {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 28px 0;
+}
 
 /* ---------- Кнопки ---------- */
 .btn {
   display: inline-block;
-  background: var(--red);
+  background: var(--carnation);
   color: #fff;
-  padding: 8px 16px;
+  padding: 9px 16px;
   border-radius: var(--radius);
   text-decoration: none;
   font-weight: 600;
-  font-size: 0.92rem;
+  font-size: 0.9rem;
   border: none;
+  min-height: 40px;
 }
-.btn:hover { background: var(--red-dark); color: #fff; }
-.btn-secondary { background: var(--surface); color: var(--red); border: 1px solid var(--red); }
-.btn-secondary:hover { background: #fdf0f0; color: var(--red-dark); }
+.btn:hover { background: var(--carnation-deep); color: #fff; }
+.btn-secondary { background: var(--surface); color: var(--carnation); border: 1px solid var(--carnation); }
+.btn-secondary:hover { background: #f8ecec; color: var(--carnation-deep); }
 
 /* ---------- Подвал ---------- */
 .site-footer {
   margin-top: 40px;
-  padding: 20px 0 32px;
+  padding: 22px 0 32px;
   background: #2b2825;
   color: rgba(255, 255, 255, 0.75);
-  font-size: 0.85rem;
+  font-size: 0.84rem;
 }
 .site-footer a { color: #e8c98a; }
+
+/* ---------- Уважение к настройкам ---------- */
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+}
+
+/* ---------- Печать: схема и страницы мест на бумагу ---------- */
+@media print {
+  @page { margin: 14mm 12mm; }
+  body { background: #fff; color: #000; font-size: 11pt; }
+  .site-header, .site-footer, .navbar, .map-links, .place-neighbours,
+  .btn, .photo-slot { display: none !important; }
+  .container { max-width: none; padding: 0; }
+  h1 { font-size: 16pt; margin: 0 0 8pt; }
+  h2 { font-size: 12.5pt; }
+  a { color: #000; text-decoration: none; }
+  .card, .map-schema, .data-table, .place-discrepancy {
+    box-shadow: none;
+    border: 1px solid #999;
+    break-inside: avoid;
+  }
+  /* Схема печатается в полный размер с подписями; звёзды — контрастнее */
+  .map-schema { background: #fff; padding: 0; }
+  .map-marker .marker-star { fill: #000; }
+  .map-marker .marker-label { stroke: #fff; }
+  .place-history { border-left-color: #999; }
+  /* Разделители страниц между местами при печати списка */
+  .route-list li { border: 1px solid #999; box-shadow: none; }
+  .print-footer-note { display: block !important; margin-top: 12pt; font-size: 9pt; color: #444; }
+}
+/* Подпись для печатной версии (в DOM добавлена в about.html) */
+.print-footer-note { display: none; }
