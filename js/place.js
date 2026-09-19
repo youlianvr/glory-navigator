@@ -45,14 +45,14 @@
       html += '<figure><img src="' + H.escape(place.photo) + '" alt="' + H.escape(place.name) + '" width="' + place.photoSize[0] + '" height="' + place.photoSize[1] + '">' +
         "<figcaption>" + H.escape(place.photoCredit) + "</figcaption></figure>";
     } else {
-      html += '<p class="photo-slot">Снимок этого места появится после полевой поездки авторов проекта. Чужих фотографий мы здесь не публикуем.</p>';
+      html += '<p class="photo-slot">Фотография появится после поездки авторов по маршруту.</p>';
     }
     if (place.visitPhotos.length) {
       html += '<div class="visit-photos">' + place.visitPhotos.map(function (src) {
         return '<img src="' + H.escape(src) + '" alt="Фотоотчёт: ' + H.escape(place.shortName) + '">';
       }).join("") + "</div>";
     } else {
-      html += '<p class="photo-slot">Фотоотчёт о личном посещении будет добавлен после поездки.</p>';
+      html += '<p class="photo-slot">Фотоотчёт авторов будет добавлен после поездки.</p>';
     }
     html += "</section>";
 
@@ -69,14 +69,14 @@
 
     html += "</article>";
 
-    H.paint(html, place.shortName + " — Дорогами славы");
+    H.paint(html, place.shortName + ": Дорогами славы");
   }
 
   function notFound() {
     H.paint(
       '<h1>Такой страницы нет</h1>' +
       '<p class="lead">Адрес не совпал ни с одним местом маршрута. Откройте <a href="#/">нитку маршрута</a> или <a href="#/map">карту-схему</a>.</p>',
-      "Страница не найдена — Дорогами славы"
+      "Страница не найдена: Дорогами славы"
     );
   }
 

@@ -64,10 +64,10 @@ check(writers.join(",") === "dom.js", "#app must be written by js/dom.js alone, 
 check(/<script/.test(indexHtml), "index.html must load the app");
 check(!/<script/.test(aboutHtml), "about.html is static and must not load app code");
 
-/* --- five section pages in the nav --- */
-var REQUIRED_LABELS = ["Нитка маршрута", "Карта-схема", "Описание", "Логистика", "Справочная информация"];
+/* --- four section pages in the nav --- */
+var REQUIRED_LABELS = ["Нитка маршрута", "Карта-схема", "Логистика", "Справочная информация"];
 check(sections.map(function (s) { return s.label; }).join("|") === REQUIRED_LABELS.join("|"),
-  "the nav must carry the five section pages in the document's order");
+  "the nav must carry the four section pages in the document's order");
 sections.forEach(function (item) {
   check(indexHtml.indexOf('href="' + item.href + '"') !== -1, "navbar must link " + item.label + " (" + item.href + ")");
 });
@@ -120,11 +120,11 @@ var savedRender = sections.map(function (s) { return s.render; });
 sections.forEach(function (s) {
   s.render = function () { dispatched.push(s.id); };
 });
-["#", "#/", "#/map", "#/opis", "#/logistika", "#/spravka"].forEach(function (hash) {
+["#", "#/", "#/map", "#/logistika", "#/spravka"].forEach(function (hash) {
   global.window.location.hash = hash;
   fire("hashchange");
 });
-check(dispatched.join(",") === ",map,opis,logistika,spravka",
+check(dispatched.join(",") === ",map,logistika,spravka",
   "router must dispatch every section route, got: " + dispatched.join(","));
 /* place route dispatch */
 var routedPlace = null;
@@ -155,10 +155,10 @@ check(appEl.innerHTML.indexOf("map-index") !== -1, "schema must carry the index 
 check((appEl.innerHTML.match(/marker-star/g) || []).length >= PLACES.length, "every marker must use the star icon");
 
 /* --- hash parsing --- */
-global.window.location.hash = "#/opis?x=1";
-check(R.parseRoute() === "opis", "router must strip query strings");
-global.window.location.hash = "#/opis/";
-check(R.parseRoute() === "opis", "router must strip trailing slashes");
+global.window.location.hash = "#/logistika?x=1";
+check(R.parseRoute() === "logistika", "router must strip query strings");
+global.window.location.hash = "#/logistika/";
+check(R.parseRoute() === "logistika", "router must strip trailing slashes");
 
 if (problems.length) {
   console.error("CONTRACT FAILED:\n- " + problems.join("\n- "));

@@ -139,25 +139,18 @@ h3 { font-size: 1.08rem; margin: 0; }
   border-bottom-color: var(--wreath);
 }
 
-/* ---------- Список нитки маршрута ---------- */
-.route-list, .map-index {
-  list-style: none;
-  padding: 0;
+/* ---------- Нитка маршрута: карточки остановок ---------- */
+.route-cards {
   margin: 18px 0;
 }
-.route-list li {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background: var(--surface);
-  border: 1px solid var(--stone);
-  border-radius: var(--radius);
-  padding: 13px 16px;
-  margin-bottom: 8px;
-  box-shadow: var(--shadow);
-  transition: border-color 0.15s ease;
+.route-cards .stop-card {
+  margin: 12px 0;
 }
-.route-list li:hover { border-color: var(--carnation); }
+.map-index {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0;
+}
 .route-step {
   flex: 0 0 auto;
   width: 30px;
@@ -173,17 +166,6 @@ h3 { font-size: 1.08rem; margin: 0; }
   font-size: 0.9rem;
 }
 .glory-star { color: var(--carnation); flex: 0 0 auto; }
-.route-name { font-weight: 600; text-decoration: none; }
-.route-name:hover { text-decoration: underline; }
-.route-settlement {
-  margin-left: auto;
-  color: var(--ink-soft);
-  font-size: 0.82rem;
-  text-align: right;
-}
-@media (max-width: 560px) {
-  .route-settlement { display: none; }
-}
 
 /* ---------- Карточки ---------- */
 .card {
@@ -362,8 +344,8 @@ h3 { font-size: 1.08rem; margin: 0; }
   .map-marker .marker-star { fill: #000; }
   .map-marker .marker-label { stroke: #fff; }
   .place-history { border-left-color: #999; }
-  /* Разделители страниц между местами при печати списка */
-  .route-list li { border: 1px solid #999; box-shadow: none; }
+  /* Разделители карточек при печати списка маршрута */
+  .stop-card { border: 1px solid #999; box-shadow: none; }
   .print-footer-note { display: block !important; margin-top: 12pt; font-size: 9pt; color: #444; }
 }
 /* Подпись для печатной версии (в DOM добавлена в about.html) */

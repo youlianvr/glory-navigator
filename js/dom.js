@@ -29,19 +29,6 @@
     return '<span class="route-step">' + (index + 1) + "</span>";
   }
 
-  function titleLink(slug, text) {
-    return '<a class="route-name" href="#/' + escape(slug) + '">' + escape(text) + "</a>";
-  }
-
-  /* Строка списка остановок: номер, звезда, название, пояснение. */
-  function stopRow(options) {
-    return '<li data-slug="' + escape(options.slug) + '">' +
-      stepNumber(options.index) + icon() +
-      titleLink(options.slug, options.title) +
-      '<span class="route-settlement">' + escape(options.meta) + "</span>" +
-      (options.action || "") + "</li>";
-  }
-
   /* Карточка объекта в отделах: шапка с номером и звездой плюс тело. */
   function stopCard(options) {
     var heading = options.titleHref
@@ -78,7 +65,6 @@
     markCurrent: markCurrent,
     paint: paint,
     icon: icon,
-    stopRow: stopRow,
     stopCard: stopCard,
     table: table
   };
